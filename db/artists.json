@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Kekra",
+    "type": "Rap",
+    "description": "blablabla"
+  },
+  {
+    "id": 2,
+    "name": "La Fève",
+    "type": "Rap",
+    "description": "blablabla"
+  },
+  {
+    "id": 3,
+    "name": "Dinos",
+    "type": "Rap",
+    "description": "blablabla"
+  }
+]
