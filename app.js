@@ -7,6 +7,11 @@ const records = require("./db/records");
 
 app.use(express.json());
 
+const formatParamsReqId = require("./utils/formatParamsReqId");
+const findDataById = require("./utils/findDataById");
+const createId = require("./utils/createId");
+const deleteData = require("./utils/deleteData");
+
 // artists
 
 app.get("/artists", (req, res) => {
@@ -14,11 +19,11 @@ app.get("/artists", (req, res) => {
 });
 
 app.get("/artists/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = formatParamsReqId(req);
   if (!id) {
     return res.status(400).json({ error: "Invalid id" });
   }
-  const artist = artists.find((artist) => artist.id === id);
+  const artist = findDataById(id, artists);
   if (!artist) {
     return res.status(404).json({ message: "Artist not found" });
   }
@@ -31,13 +36,13 @@ app.post("/artists", (req, res) => {
   if (!name || !categoryId || !description || !recordIds) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  const id = artists[artists.length - 1].id + 1;
+  const id = createId(artists);
   let category;
   categoryId = Number(categoryId);
   if (!categoryId) {
     return res.status(400).json({ error: "Invalid categoryId" });
   }
-  category = categories.find((category) => category.id === categoryId);
+  category = findDataById(categoryId, categories);
   if (!category) {
     return res.status(400).json({ error: "Category not found" });
   }
@@ -49,17 +54,18 @@ app.post("/artists", (req, res) => {
   recordIds.forEach((recordId) => {
     _links.records.push({ href: `http://localhost:3000/records/${recordId}` });
   });
-  const newArtist = { id, name, category, _links, description };
+  const _self = `http://localhost:3000/artists/${id}`;
+  const newArtist = { id, name, category, _links, description, _self };
   artists.push(newArtist);
   res.status(201).json(newArtist);
 });
 
 app.put("/artists/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = formatParamsReqId(req);
   if (!id) {
     return res.status(400).json({ error: "Invalid id" });
   }
-  const artist = artists.find((artist) => artist.id === id);
+  const artist = findDataById(id, artists);
   if (!artist) {
     return res.status(404).json({ message: "Artist not found" });
   }
@@ -71,7 +77,7 @@ app.put("/artists/:id", (req, res) => {
   categoryId = Number(categoryId);
   let category;
   if (categoryId) {
-    category = categories.find((category) => category.id === categoryId);
+    category = findDataById(categoryId, categories);
   } else {
     return res.status(400).json({ error: "Invalid categoryId" });
   }
@@ -80,24 +86,25 @@ app.put("/artists/:id", (req, res) => {
   recordIds.forEach((recordId) => {
     _links.records.push({ href: `http://localhost:3000/records/${recordId}` });
   });
+  const _self = `http://localhost:3000/artists/${id}`;
   artist.name = name;
   artist.category = category;
   artist._links = _links;
   artist.description = description;
+  artist._self = _self;
   res.status(200).json(artist);
 });
 
 app.delete("/artists/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = formatParamsReqId(req);
   if (!id) {
     return res.status(400).json({ error: "Invalid id" });
   }
-  const artist = artists.find((artist) => artist.id === id);
+  const artist = findDataById(id, artists);
   if (!artist) {
     return res.status(404).json({ message: "Artist not found" });
   }
-  const index = artists.indexOf(artist);
-  artists.splice(index, 1);
+  deleteData(artists, artist);
   res.status(204).json();
 });
 
@@ -108,11 +115,11 @@ app.get("/categories", (req, res) => {
 });
 
 app.get("/categories/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = formatParamsReqId(req);
   if (!id) {
     return res.status(400).json({ error: "Invalid id" });
   }
-  const category = categories.find((category) => category.id === id);
+  const category = findDataById(id, categories);
   if (!category) {
     return res.status(404).json({ message: "Category not found" });
   }
@@ -124,18 +131,18 @@ app.post("/categories", (req, res) => {
   if (!title || !description) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  const id = categories[categories.length - 1].id + 1;
+  const id = createId(categories);
   const newCategory = { id, title, description };
   categories.push(newCategory);
   res.status(201).json(newCategory);
 });
 
 app.put("/categories/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = formatParamsReqId(req);
   if (!id) {
     return res.status(400).json({ error: "Invalid id" });
   }
-  const category = categories.find((category) => category.id === id);
+  const category = findDataById(id, categories);
   if (!category) {
     return res.status(404).json({ message: "Category not found" });
   }
@@ -149,16 +156,15 @@ app.put("/categories/:id", (req, res) => {
 });
 
 app.delete("/categories/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = formatParamsReqId(req);
   if (!id) {
     return res.status(400).json({ error: "Invalid id" });
   }
-  const category = categories.find((category) => category.id === id);
+  const category = findDataById(id, categories);
   if (!category) {
     return res.status(404).json({ message: "Category not found" });
   }
-  const index = categories.indexOf(category);
-  categories.splice(index, 1);
+  deleteData(categories, category);
   res.status(204).json();
 });
 
@@ -169,11 +175,11 @@ app.get("/records", (req, res) => {
 });
 
 app.get("/records/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = formatParamsReqId(req);
   if (!id) {
     return res.status(400).json({ error: "Invalid id" });
   }
-  const record = records.find((record) => record.id === id);
+  const record = findDataById(id, records);
   if (!record) {
     return res.status(404).json({ message: "Record not found" });
   }
@@ -185,18 +191,18 @@ app.post("/records", (req, res) => {
   if (!name || !description) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  const id = record[record.length - 1].id + 1;
+  const id = createId(records);
   const newRecord = { id, name, description };
   records.push(newRecord);
   res.status(201).json(newRecord);
 });
 
 app.put("/records/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = formatParamsReqId(req);
   if (!id) {
     return res.status(400).json({ error: "Invalid id" });
   }
-  const record = records.find((record) => record.id === id);
+  const record = findDataById(id, records);
   if (!record) {
     return res.status(404).json({ message: "Record not found" });
   }
@@ -209,16 +215,15 @@ app.put("/records/:id", (req, res) => {
 });
 
 app.delete("/records/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = formatParamsReqId(req);
   if (!id) {
     return res.status(400).json({ error: "Invalid id" });
   }
-  const record = records.find((record) => record.id === id);
+  const record = findDataById(id, records);
   if (!record) {
     return res.status(404).json({ message: "Record not found" });
   }
-  const index = records.indexOf(record);
-  records.splice(index, 1);
+  deleteData(records, record);
   res.status(204).json();
 });
 
