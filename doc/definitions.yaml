@@ -1,0 +1,409 @@
+openapi: 3.0.3
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  version: 1.0.11
+tags:
+  - name: artists
+    description: Everything about your Artists
+  - name: categories
+    description: Access to Categories
+  - name: records
+    description: Operations about records
+paths:
+  /artists/{id}:
+    put:
+      tags:
+        - artists
+      summary: Update an existing artist
+      description: Update an existing artist by Id
+      operationId: updateArtist
+      parameters:
+        - name: id
+          in: path
+          description: ID of artist that needs to be modified
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent artist in the store
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Artist"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Pet not found
+        "405":
+          description: Validation exception
+    get:
+      tags:
+        - artists
+      summary: Finds artist by id
+      description: Finds artist by id
+      operationId: findPetsByTags
+      parameters:
+        - name: id
+          in: path
+          description: ID of artist that needs to be modified
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Artist"
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Artist"
+        "400":
+          description: Invalid tag value
+    delete:
+      tags:
+        - artists
+      summary: Finds artist by id
+      description: Finds artist by id
+      operationId: deleteArtist
+      parameters:
+        - name: id
+          in: path
+          description: ID of artist that needs to be modified
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Artist"
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Artist"
+        "400":
+          description: Invalid tag value
+  /artists:
+    post:
+      tags:
+        - artists
+      summary: Add a new artist to the store
+      description: Add a new artist to the store
+      operationId: addArtist
+      requestBody:
+        description: Create a new artist in the store
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Artist"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+        "405":
+          description: Invalid input
+    get:
+      tags:
+        - artists
+      summary: Finds artists
+      description: Finds all artists
+      operationId: findArtists
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Artist"
+        "400":
+          description: Invalid status value
+  /categories:
+    get:
+      tags:
+        - categories
+      summary: Finds categories
+      description: Finds all categories
+      operationId: findCategories
+      responses:
+        "200":
+          description: successful operation
+    post:
+      tags:
+        - categories
+      summary: Post category
+      description: Post category
+      operationId: postCategory
+      responses:
+        "200":
+          description: successful operation
+  /categories/{id}:
+    put:
+      tags:
+        - categories
+      summary: Update an existing artist
+      description: Update an existing artist by Id
+      operationId: updateCategories
+      parameters:
+        - name: id
+          in: path
+          description: ID of artist that needs to be modified
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent artist in the store
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Pet not found
+        "405":
+          description: Validation exception
+    get:
+      tags:
+        - categories
+      summary: Finds artist by id
+      description: Finds artist by id
+      operationId: findCategory
+      parameters:
+        - name: id
+          in: path
+          description: ID of artist that needs to be modified
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+        "400":
+          description: Invalid tag value
+    delete:
+      tags:
+        - categories
+      summary: Finds artist by id
+      description: Finds artist by id
+      operationId: deleteCategories
+      parameters:
+        - name: id
+          in: path
+          description: ID of artist that needs to be modified
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+        "400":
+          description: Invalid tag value
+  /records:
+    get:
+      tags:
+        - records
+      summary: Finds records
+      description: Finds all records
+      operationId: findrecords
+      responses:
+        "200":
+          description: successful operation
+    post:
+      tags:
+        - records
+      summary: Post records
+      description: Post records
+      operationId: postrecords
+      responses:
+        "200":
+          description: successful operation
+  /records/{id}:
+    put:
+      tags:
+        - records
+      summary: Update an existing records
+      description: Update an existing records by Id
+      operationId: updaterecords
+      parameters:
+        - name: id
+          in: path
+          description: ID of artist that needs to be modified
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent artist in the store
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Record"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Pet not found
+        "405":
+          description: Validation exception
+    get:
+      tags:
+        - records
+      summary: Finds records by id
+      description: Finds records by id
+      operationId: findrecord
+      parameters:
+        - name: id
+          in: path
+          description: ID of artist that needs to be modified
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Record"
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Record"
+        "400":
+          description: Invalid tag value
+    delete:
+      tags:
+        - records
+      summary: Finds records by id
+      description: Finds records by id
+      operationId: deleterecords
+      parameters:
+        - name: id
+          in: path
+          description: ID of artist that needs to be modified
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Record"
+        "400":
+          description: Invalid tag value
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 100000
+        title:
+          type: string
+          example: fehguy
+        description:
+          type: string
+          example: fehguy
+    Record:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 100000
+        name:
+          type: string
+          example: fehguy
+    Artist:
+      required:
+        - name
+        - categoryId
+        - recordIds
+        - description
+      type: object
+      properties:
+        name:
+          type: string
+          example: Kekra
+        categoryId:
+          type: integer
+        recordIds:
+          type: array
+          items:
+            type: integer
+        description:
+          type: string

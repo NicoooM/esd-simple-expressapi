@@ -1,5 +1,21 @@
 const express = require("express");
 const app = express();
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+const options = {
+  failOnErrors: true,
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Artists API",
+      version: "1.0.0",
+    },
+  },
+  apis: ["./app.js", "./doc/definitions.yaml"],
+};
+const openapiSpecification = swaggerJSDoc(options);
+app.use("/api", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
 const artists = require("./db/artists");
 const categories = require("./db/categories");
