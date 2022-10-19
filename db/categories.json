@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "title": "rap",
+    "description": "rap category"
+  },
+  {
+    "id": 2,
+    "title": "rock",
+    "description": "rock category"
+  },
+  {
+    "id": 3,
+    "title": "hip-hop",
+    "description": "hip-hop category"
+  }
+]

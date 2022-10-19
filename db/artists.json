@@ -2,13 +2,23 @@
   {
     "id": 1,
     "name": "Kekra",
-    "type": "Rap",
+    "category": {
+      "id": 1,
+      "title": "rap",
+      "description": "rap category"
+    },
     "description": "blablabla"
   },
   {
     "id": 2,
     "name": "La Fève",
-    "type": "Rap",
+    "_links": {
+      "records": [
+        {
+          "href": "http://localhost:3000/records/2"
+        }
+      ]
+    },
     "description": "blablabla"
   },
   {
